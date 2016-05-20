@@ -9,3 +9,7 @@ default:
   timeout: 5000
   connectTimeout: 10000
   listeningPort: 3000
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: changeme
