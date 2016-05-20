@@ -31,7 +31,7 @@ app.post('/authenticate', function(req, res) {
   if (req.body.username && req.body.password) {
     auth.authenticate(req.body.username, req.body.password, function(err, user) {
       if (err) {
-        res.status(401).send({ error: 'Wrong user or password (could be admin or credentials)'});
+        res.status(401).send({ error: 'Wrong user or password'});
       } else if (user) {
         var expires = moment().add(7, 'days').valueOf();
         var token = jwt.encode({
