@@ -5,7 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var jwt = require('jwt-simple');
 var moment = require('moment');
-var LdapAuth = require('ldapauth');
+var LdapAuth = require('ldapauth-fork');
 var cors = require('cors');
 
 var app = express();

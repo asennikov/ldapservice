@@ -3,8 +3,11 @@
   "description": "LDAP authentication service",
   "version": "0.0.2",
   "private": true,
+  "engines": {
+    "node": ">= 0.10.0"
+  },
   "dependencies": {
-    "ldapauth": "~2.2.4",
+    "ldapauth-fork": "~2.2.4",
     "jwt-simple": "~0.2.0",
     "moment": "~2.8.1",
     "yaml-config": "~0.3.0",
