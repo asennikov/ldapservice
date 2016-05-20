@@ -1,18 +1,11 @@
 # Profile Service
 A node.js based web service that provides user authentication against LDAP server (Active Directory / Windows network) credentials and returns a JSON Web Token.
-Optional Rabbit MQ integration to allow this service to talk to other services to validate tokens sent to other API's, allowing all authentication to be in one spot.
 
 # Usage
 Copy config/app.yaml.sample to config/app.yaml and update the values accordingly.
 Default configuration searches using the same login name you use when logging on with Windows.
 
 Send an HTTP POST to `/authenticate` with username and password values, a JSON Web Token (JWT) is returned on success, or an error message on failure.
-
-# Rabbit MQ integration
-Provides an RPC interface through Rabbit MQ.  Will validate a token passed in and return the user data to the calling service.
-
-# Credit
-Heavily modeled after this post: http://www.sitepoint.com/using-json-web-tokens-node-js/
 
 # Available attributes about a user after authentication
 ```
@@ -55,7 +48,3 @@ Heavily modeled after this post: http://www.sitepoint.com/using-json-web-tokens-
   mail: 'useremail@domain.com'·
 }
 ```
-
-# TO DO
-Parse the group information to return an array of just the group names
-

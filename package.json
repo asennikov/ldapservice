@@ -1,7 +1,7 @@
 {
   "name": "ldap_service",
-  "description": "authentication service to windows domain",
-  "version": "0.0.1",
+  "description": "LDAP authentication service",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "ldapauth": "~2.2.4",
@@ -10,7 +10,6 @@
     "yaml-config": "~0.3.0",
     "express": "~4.8.2",
     "body-parser": "~1.6.2",
-    "cors": "~2.4.1",
-    "amqp-rpc": "0.0.8"
+    "cors": "~2.4.1"
   }
 }

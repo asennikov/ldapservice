@@ -8,8 +8,4 @@ default:
   secret: "YOUR_SECRET_STRING"
   timeout: 5000
   connectTimeout: 10000
-  rabbitmq:
-    username: guest
-    password: guest
-    url: localhost
-    port: 5672
+  listeningPort: 3000

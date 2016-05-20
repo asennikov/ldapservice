@@ -7,74 +7,55 @@ var jwt = require('jwt-simple');
 var moment = require('moment');
 var LdapAuth = require('ldapauth');
 var cors = require('cors');
-var rpc = require('./rpc.js');
 
-app = express();
-var jwtauth = require('./jwtauth.js');
+var app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cors());
 
 var options = {
-    url: settings.url,
-    searchBase: settings.searchBase,
-    searchFilter: settings.searchFilter,
-    adminDn: settings.admin.username,
-    adminPassword: settings.admin.password,
-    timeout: settings.timeout,
-    connectTimeout: settings.connectTimeout
-}
+  url: settings.url,
+  searchBase: settings.searchBase,
+  searchFilter: settings.searchFilter,
+  adminDn: settings.admin.username,
+  adminPassword: settings.admin.password,
+  timeout: settings.timeout,
+  connectTimeout: settings.connectTimeout
+};
 var auth = new LdapAuth(options);
 
 app.set('jwtTokenSecret', settings.secret);
 
-app.post('/authenticate', function (req, res) {
-    if(req.body.username && req.body.password) {
-        auth.authenticate(req.body.username, req.body.password, function(err, user) {
-            if(err) {
-                res.status(401).send({ error: 'Wrong user or password (could be admin or credentials)'});
-                return false;
-            }
-            if(user) {
-                var expires = moment().add(7, 'days').valueOf();
-                var token = jwt.encode({
-                    exp: expires,
-                    username: user.sAMAccountName,
-                    groups: user.memberOf,
-                    mail: user.mail
-                }, app.get('jwtTokenSecret'));
+app.post('/authenticate', function(req, res) {
+  if (req.body.username && req.body.password) {
+    auth.authenticate(req.body.username, req.body.password, function(err, user) {
+      if (err) {
+        res.status(401).send({ error: 'Wrong user or password (could be admin or credentials)'});
+      } else if (user) {
+        var expires = moment().add(7, 'days').valueOf();
+        var token = jwt.encode({
+          exp: expires,
+          username: user.sAMAccountName,
+          groups: user.memberOf,
+          mail: user.mail
+        }, app.get('jwtTokenSecret'));
 
-                res.json({
-                    token : token,
-                    expires: expires,
-                    user: {
-                        'username': user.sAMAccountName,
-                        'groups'  : user.memberOf
-                    }
-                });
-
-                return user;
-            }
+        res.json({
+          token : token,
+          expires: expires,
+          user: {
+            'username': user.sAMAccountName,
+            'groups': user.memberOf
+          }
         });
-    } else {
-        res.status(401).send({error: "No username or password supplied"});
-    }
+      }
+    });
+  } else {
+    res.status(401).send({error: "No username or password supplied"});
+  }
 });
 
-app.all('/api/*', [bodyParser(), jwtauth]);
-
-app.get('/api/protected', function(req, res) {
-    if(!req.user) {
-        res.send({ error: "Invalid token"});
-        return;
-    }
-    res.send(req.user);
-
+app.listen(settings.listeningPort, function() {
+    console.log("Listening on port: " + settings.listeningPort);
 });
-
-app.set('port', 3002);
-app.listen(3002, function() {
-    console.log("Listening on port: " + app.get('port'));
-});
-
